@@ -10,7 +10,7 @@ def adduser(update, context):
     l = open('text.txt', 'a')
     name = update.message.from_user.first_name
     l.write(name + '\n')
-    context.bot.send_message(chat_id=update.message.chat_id, text='Мы добавили вас в список')
+    context.bot.add_user(chat_id=update.message.chat_id, text='Мы добавили вас в список')
 
 
 def deluser(update, context):
