@@ -35,11 +35,11 @@ def adduser(update, context):
     name = update.message.from_user.first_name
     l.write(name + '\n')
     if update.message.text in eng_dic.keys():
-        context.bot.send_message(chat_id=update.message.chat_id, text=eng_dic[update.message.text][0])
+        context.bot.send_message(chat_id=update.message.chat_id, text=eng_dic[update.message.text][1])
     elif update.message.text in rus_dic.keys():
-        context.bot.send_message(chat_id=update.message.chat_id, text=rus_dic[update.message.text][0])
+        context.bot.send_message(chat_id=update.message.chat_id, text=rus_dic[update.message.text][1])
     elif update.message.text in uzb_dic.keys():
-        context.bot.send_message(chat_id=update.message.chat_id, text=uzb_dic[update.message.text][0])
+        context.bot.send_message(chat_id=update.message.chat_id, text=uzb_dic[update.message.text][1])
 
 def deluser(update, context):
     n = []
@@ -55,19 +55,19 @@ def deluser(update, context):
         l.write(i)
         l.close()
     if update.message.text in eng_dic.keys():
-        context.bot.send_message(chat_id=update.message.chat_id, text=eng_dic[update.message.text][0])
+        context.bot.send_message(chat_id=update.message.chat_id, text=eng_dic[update.message.text][1])
     elif update.message.text in rus_dic.keys():
-        context.bot.send_message(chat_id=update.message.chat_id, text=rus_dic[update.message.text][0])
+        context.bot.send_message(chat_id=update.message.chat_id, text=rus_dic[update.message.text][1])
     elif update.message.text in uzb_dic.keys():
-        context.bot.send_message(chat_id=update.message.chat_id, text=uzb_dic[update.message.text][0])
+        context.bot.send_message(chat_id=update.message.chat_id, text=uzb_dic[update.message.text][1])
 
 def bye(update, context):
     if update.message.text in eng_dic.keys():
-        context.bot.send_message(chat_id=update.message.chat_id, text=eng_dic[update.message.text][0])
+        context.bot.send_message(chat_id=update.message.chat_id, text=eng_dic[update.message.text][1])
     elif update.message.text in rus_dic.keys():
-        context.bot.send_message(chat_id=update.message.chat_id, text=rus_dic[update.message.text][0])
+        context.bot.send_message(chat_id=update.message.chat_id, text=rus_dic[update.message.text][1])
     elif update.message.text in uzb_dic.keys():
-        context.bot.send_message(chat_id=update.message.chat_id, text=uzb_dic[update.message.text][0])
+        context.bot.send_message(chat_id=update.message.chat_id, text=uzb_dic[update.message.text][1])
 
 TOKEN = '1484337650:AAHdJm-3CZRmb23MM5F4L5l6KrNL12hOleo'
 updater = Updater(token=TOKEN)
