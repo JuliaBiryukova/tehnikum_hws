@@ -81,7 +81,7 @@ def clicked(update, context):
     context.bot.send_message(chat_id=update.callback_query.from_user.id,
                              text='you clicked 1st button')
 
-TOKEN = '1444025910:AAHm7cY9JTtvh_O7Unx2-pvCcP7MosMUB6w'
+TOKEN = ''
 updater = Updater(token=TOKEN)
 dispatcher = updater.dispatcher
 
