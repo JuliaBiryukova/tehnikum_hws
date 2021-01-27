@@ -1,77 +1,59 @@
-from telegram import KeyboardButton, ReplyKeyboardMarkup
-from constants import *
-import random, telegram
-import time
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+from base.constants import *
+import random
+import telegram, time
+import sqlite3
+
+
+def buttons(update, context):
+    chat_id = update.message.chat_id
+    top_buttons_list = [
+        InlineKeyboardButton(text=t1, callback_data='cro')
+    ]
+    mid_buttons_list = [
+        InlineKeyboardButton(text=t2, callback_data='numb')
+    ]
+    bot_buttons_list = [
+        InlineKeyboardButton(text=t3, callback_data='fate')
+    ]
+    print(chat_id, 'clicked')
+
+    context.bot.send_message(
+        text='Что выберете?',
+        chat_id=chat_id,
+        reply_markup=InlineKeyboardMarkup([top_buttons_list, mid_buttons_list, bot_buttons_list
+                                           ])
+    )
+
 
 def numb(update, context):
-    context.bot.send_message(chat_id=update.message.chat_id,
+    try:
+        chat_id = update.callback_query.from_user.id
+    except:
+        chat_id = update.message.from_user.id
+    conn = sqlite3.connect(PATH_TO_DB)
+    cursor = conn.cursor()
+    cursor.execute('''
+                                       insert into RandomNumbers values('{}', '{}')
+                                       '''.format(id, random.randint(1000, 10000)))
+
+    print(chat_id, 123)
+    conn = sqlite3.connect(PATH_TO_DB)
+    cur = conn.cursor()
+    cur.execute('''update IdentifiedUsers 
+                   set status=2 
+                   where id='{}'
+                '''.format(chat_id))
+    conn.commit()
+    context.bot.send_chat_action(chat_id=chat_id, action=telegram.ChatAction.TYPING)
+    context.bot.send_message(chat_id=chat_id,
                              text=number)
-    a = 0
-    context.bot.send_message(chat_id=update.message.chat_id,
-                             text='Введите два числа:')
-    z = int(input())
-    x = int(input())
-    n = random.randint(z, x)
-    context.bot.send_chat_action(chat_id=update.message.chat_id, action=telegram.ChatAction.TYPING)
     time.sleep(3)
-    context.bot.send_message(chat_id=update.message.chat_id,
-                             text='Хорошо!')
-    while True:
-        context.bot.send_chat_action(chat_id=update.message.chat_id, action=telegram.ChatAction.TYPING)
-        time.sleep(2)
-        context.bot.send_message(chat_id=update.message.chat_id,
-                                 text='Ваш ответ:' + '{}')
-        if int(update.message.text) > n:
-            context.bot.send_message(chat_id=update.message.chat_id,
-                                     text='Моё число меньше твоего')
-            context.bot.send_message(chat_id=update.message.chat_id,
-                                     text='Думай Кузя, Думай!')
-        elif int(update.message.text) < n:
-            context.bot.send_message(chat_id=update.message.chat_id,
-                                     text='Моё число больше твоего')
-            context.bot.send_sticker(chat_id=update.callback_query.from_user.id,
-                                     sticker='CAACAgIAAxkBAAKxuGABvB-qYvGGoHP-J7pC-dM5ihm9AAJDgQACns4LAAEIT4bAC7UqGR4E')
-        elif (int(update.message.text) == n + 1) or (int(update.message.text) == n - 1):
-            context.bot.send_message(chat_id=update.message.chat_id,
-                                     text='Горячо!')
-            context.bot.send_sticker(chat_id=update.callback_query.from_user.id,
-                                     sticker='CAACAgIAAxkBAAKxzWABx0sqUAEJe-gP2A6PRmt2Jkb-AAJKAANH-wkMS4BHVUtTO2UeBA')
-        elif (int(update.message.text) == n + 3) or (int(update.message.text) == n - 3):
-            context.bot.send_chat_action(chat_id=update.message.chat_id, action=telegram.ChatAction.TYPING)
-            time.sleep(2)
-            context.bot.send_message(chat_id=update.message.chat_id,
-                                     text='Тепло!')
-        elif int(update.message.text) == n:
-            break
-        else:
-            context.bot.send_message(chat_id=update.message.chat_id,
-                                     text='Холодно')
-            context.bot.send_sticker(chat_id=update.callback_query.from_user.id,
-                                     sticker='CAACAgIAAxkBAAKx0GAByJ1KoDYWUSzxCQKeA8isshx6AAJIAANH-wkMbIxNWYsX_SgeBA')
 
-    context.bot.send_chat_action(chat_id=update.message.chat_id, action=telegram.ChatAction.TYPING)
-    time.sleep(2)
-    context.bot.send_message(chat_id=update.message.chat_id,
-                             text='Ну что ж..., Не плохо, не плохо')
-    context.bot.send_chat_action(chat_id=update.message.chat_id, action=telegram.ChatAction.TYPING)
-    time.sleep(2)
-    context.bot.send_message(chat_id=update.message.chat_id,
-                             text='Хочешь продолжить?')
-
-    if update.message.text == 'да':
-        numb(update,context)
-    if update.message.text == 'нет':
-        chat_id = update.message.chat_id
-        buttons_list = [
-            KeyboardButton(text='Кроко', callback_data='clicked'),
-            KeyboardButton(text='Отгадай число', callback_data='clicked'),
-            KeyboardButton(text='Послание из будущего', callback_data='clicked')
-        ]
-        print(chat_id, 'clicked')
-
-        context.bot.send_message(
-            text='Choose button:',
-            chat_id=chat_id,
-            reply_markup=ReplyKeyboardMarkup([buttons_list
-                                               ])
-        )
+    context.bot.send_message(chat_id=chat_id,
+                             text='И так... Загадываю число')
+    context.bot.send_chat_action(chat_id=chat_id,
+                                 action=telegram.ChatAction.TYPING)
+    time.sleep(7)
+    context.bot.send_message(chat_id=chat_id,
+                             text='Ну всё... Поехали')
