@@ -7,4 +7,15 @@ create table if not exists NewUsers(id integer,
  phonenumber integer,
   code integer)
 ''')
+
+create table if not exists IdentifiedUsers(id integer,
+ status integer)
+''')
+
+create table if not exists RandomNumbers(id integer,
+ random_number integer)
+''')
+
 conn.commit()
+
+
