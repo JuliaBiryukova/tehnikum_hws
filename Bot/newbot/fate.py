@@ -1,35 +1,31 @@
-from telegram import KeyboardButton, ReplyKeyboardMarkup
-import telegram, time, random
+import random, telegram, time
 from fate_text import *
+from constants import *
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+
+
 def fate(update, context):
-    while True:
-        context.bot.send_chat_action(chat_id=update.message.chat_id, action=telegram.ChatAction.TYPING)
-        time.sleep(5)
-        context.bot.send_message(chat_id=update.message.chat_id, text='Готов узнать своё послание?')
-        ft = random.randint(a, z)
-        if update.message.text == 'да':
-            context.bot.send_message(chat_id=update.message.chat_id, text=ft)
 
-        context.bot.send_chat_action(chat_id=update.message.chat_id, action=telegram.ChatAction.TYPING)
-        time.sleep(5)
-        context.bot.send_message(chat_id=update.message.chat_id, text='Продолжим?')
-        if update.message.text == 'да':
-            context.bot.send_chat_action(chat_id=update.message.chat_id, action=telegram.ChatAction.TYPING)
-            time.sleep(3)
-            ft = random.randint(a, z)
-            context.bot.send_message(chat_id=update.message.chat_id, text=ft)
-        if update.message.text == 'нет':
-            chat_id = update.message.chat_id
-            buttons_list = [
-                KeyboardButton(text='Кроко', callback_data='clicked'),
-                KeyboardButton(text='Отгадай число', callback_data='clicked'),
-                KeyboardButton(text='Послание из будущего', callback_data='clicked')
-            ]
-            print(chat_id, 'clicked')
+    chat_id = update.message.chat_id
+    context.bot.send_chat_action(chat_id=update.message.chat_id, action=telegram.ChatAction.TYPING)
+    time.sleep(2)
+    ft_butt = [InlineKeyboardButton(text='Да!', callback_data='poslaniye'),
+               InlineKeyboardButton(text='Конечно', callback_data='poslaniye')]
+    print(chat_id, 'clicked')
 
-            context.bot.send_message(
-                text='Choose button:',
-                chat_id=chat_id,
-                reply_markup=ReplyKeyboardMarkup([buttons_list
-                                                  ])
-            )
+    context.bot.send_message(
+        text=fate1,
+        chat_id=chat_id,
+        reply_markup=InlineKeyboardMarkup([ft_butt
+                                            ])
+    )
+
+
+def poslaniye(update, context):
+    chat_id = update.callback_query.from_user.id
+    context.bot.send_message(chat_id=chat_id, text=poslaniye1)
+    context.bot.send_message(chat_id=chat_id, text=poslaniye2)
+    b = len(a)
+    c = random.randint(1, b)
+    context.bot.send_message(chat_id=chat_id, text=a[c])
+    context.bot.send_message(chat_id=chat_id, text=numb8)
